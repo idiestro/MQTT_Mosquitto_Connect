@@ -1,27 +1,28 @@
 package MQTT;
 
-import org.eclipse.paho.client.mqttv3.MqttClient;
-import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
-import org.eclipse.paho.client.mqttv3.MqttException;
-import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.eclipse.paho.client.mqttv3.*;
+import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
 public class MqttConnection {
 
-    MqttClient mqttClient;
-    MqttConnectOptions mqttConnectOptions;
-    MqttMessage mqttMessage;
+    private MqttClient mqttClient;
+    private MqttConnectOptions mqttConnectOptions;
+    private MqttMessage mqttMessage;
+    private MemoryPersistence persistence = new MemoryPersistence();
 
-    public void connect(){
+    public void connect(String host, String port, String clientId){
         System.out.println("Connecting to broker...");
+        String finalEndpoint = "tcp://" + host + ":" + port;
         try{
-            mqttClient = new MqttClient(host, clientId, persistence);
+            mqttClient = new MqttClient(finalEndpoint, clientId, persistence);
             mqttConnectOptions = new MqttConnectOptions();
             mqttConnectOptions.setCleanSession(true);
+            mqttClient.connect(mqttConnectOptions);
             System.out.println("Connection successfully!");
 
         }catch (MqttException e){
             System.out.println("Connection failed!");
-            exceptionPrinted(e);
+            exceptionPrinter(e);
         }
 
     }
@@ -32,7 +33,7 @@ public class MqttConnection {
         System.out.println("Message publised!");
     }
 
-    private void exceptionPrinted(MqttException e){
+    private void exceptionPrinter(MqttException e){
         System.out.println("Reason:" + e.getReasonCode());
         System.out.println("Message:" + e.getMessage());
         System.out.println("Localization:" + e.getLocalizedMessage());
