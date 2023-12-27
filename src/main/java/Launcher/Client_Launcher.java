@@ -19,6 +19,7 @@ public class Client_Launcher extends Thread {
 
     private static void setUp() {
         try {
+            //Read properties
             Properties prop = Utils.getConfigProperties();
             host = prop.getProperty("HOST");
             port = prop.getProperty("PORT");
@@ -27,6 +28,7 @@ public class Client_Launcher extends Thread {
             topicPublish = prop.getProperty("TOPIC_PUBLISH");
             qosLevel = Integer.valueOf(prop.getProperty("QOS_LEVEL"));
 
+            //Instance classes
             mqttConnection = new MqttConnection();
             measures = new randomMeasures();
         } catch (Exception e) {

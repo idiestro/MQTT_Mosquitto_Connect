@@ -31,7 +31,8 @@ public class Control_Launcher extends Thread{
             throw new RuntimeException(e);
         }
     }
-    private static void mqttConnect(){
+
+    public void run(){
         //Setup connection
         mqttConnection.connectionSetUp(host, port, clientId);
         //Set callback
@@ -42,9 +43,6 @@ public class Control_Launcher extends Thread{
         mqttConnection.subscribeTopic(topicSubscribe, qosLevel);
     }
 
-    public void run(){
-        mqttConnect();
-    }
     public static void main(String[] args) {
         setUp();
         Control_Launcher control = new Control_Launcher();
